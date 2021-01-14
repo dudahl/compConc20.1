@@ -1,11 +1,11 @@
-#include <pthread.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
+#include <pthread.h>
 
 #define NTHREAD  4
 
-int AUX= 0;
+int AUX=0;
 char mensagem1[15] = "tudo bem?";
 char mensagem2[15] = "bom dia?";
 char mensagem3[15] = "ate mais!";
@@ -18,18 +18,18 @@ void *primarias(void *args) {
     int * thID = (int *) args;
 
     switch(*thID+1) {
-    case 1: printf("(thread%d) %s\n", *thID+1, mensagem1);
-      break;
-    case 2: printf("(thread%d) %s\n", *thID+1, mensagem2);
-      break;
+        case 1: printf("(thread%d) %s\n", *thID+1, mensagem1);
+            break;
+        case 2: printf("(thread%d) %s\n", *thID+1, mensagem2);
+            break;
     }
 
     pthread_mutex_lock(&mutex);
     AUX++;
 
     if(AUX == 2) {
-        //printf("a thread%d sinaliza a condicao\n", *thID+1);
         pthread_cond_broadcast(&cond);
+        //printf("a thread%d sinaliza a condicao\n", *thID+1);
     }
 
     pthread_mutex_unlock(&mutex);
@@ -70,7 +70,7 @@ int main(int argc, char *argv[]) {
     pthread_cond_init(&cond, NULL);
 
     //criando as threads
-    for (int i=0; i<NTHREAD; i++){
+    for (int i=0; i<NTHREAD; i++) {
         if(i<2) {
           exec=primarias;
         } else {
@@ -82,11 +82,11 @@ int main(int argc, char *argv[]) {
     for (int j=0; j<NTHREAD; j++) {
         pthread_join(IDsist[j], NULL);
     }
-
-    printf("\nFim.");
-
+    
     pthread_mutex_destroy(&mutex);
     pthread_cond_destroy(&cond);
+    printf("\nFim.");
 
     return 0;
+    
 }
